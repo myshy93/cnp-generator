@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 
 
 class Gender(Enum):
@@ -58,16 +59,29 @@ class Region(Enum):
 
 
 class Cnp:
-    def __init__(self, gender, year, month, day, region, serial=1, resident=False):
+    def __init__(self, gender, birth_date, region, serial=1, resident=False):
+
+        # sanity checks
+        if not isinstance(gender, Gender):
+            raise TypeError('Gender in not a gender object.')
+
+        if not isinstance(birth_date, datetime):
+            raise TypeError('Birth date is not a datetime object.')
+
+        if not isinstance(region, Region):
+            raise TypeError('Region is not a Region object.')
+
+        if not isinstance(serial, int) or serial > 1000 or serial < 1:
+            raise TypeError('Invalid serial. Must be a int in range 1-999.')
+
+        if not isinstance(resident, bool):
+            raise TypeError('Residential state should be bool.')
+
         self.gender = gender
-        self.year = year
-        self.month = month
-        self.day = day
+        self.birth_date = birth_date
         self.region = region
         self.serial = serial
         self.resident = resident
-
-    # TODO: validate dates
 
     def get_gender_code(self):
         """Calculate gender code based on gender, year and whether is resident or not.
@@ -78,14 +92,14 @@ class Cnp:
         """
         if self.resident:
             gen_code = 7
-        elif 1900 <= self.year <= 1999:
+        elif 1900 <= self.birth_date.year <= 1999:
             gen_code = 1
-        elif 1800 <= self.year <= 1899:
+        elif 1800 <= self.birth_date.year <= 1899:
             gen_code = 3
-        elif 2000 <= self.year <= 2099:
+        elif 2000 <= self.birth_date.year <= 2099:
             gen_code = 5
         else:
-            raise ValueError('Invalid year.')
+            raise ValueError('Year is out of range.')
 
         if self.gender == Gender.F:
             gen_code += 1
@@ -93,20 +107,18 @@ class Cnp:
         return gen_code
 
     def get_partial(self):
-        year_digits = [int(x) for x in str(self.year)]
-        month_digits = [int(x) for x in str(self.month)]
+        return "".join([
+            str(self.get_gender_code()),
+            self.birth_date.strftime("%y"),
+            self.birth_date.strftime("%m"),
+            self.birth_date.strftime("%d"),
+            f"{self.region.value:0>2}"
+            f"{self.serial:0>3}",
+        ])
 
-        if len(year_digits) != 4:
-            raise ValueError('Invalid year.')
+    def get_full(self):
+        pass
 
-        partial = [
-            self.get_gender_code(),
-            year_digits[-2],
-            year_digits[-1],
-
-        ]
-
-        return partial
 
 
 class Generator:
@@ -114,5 +126,5 @@ class Generator:
 
 
 if __name__ == '__main__':
-    cnp1 = Cnp(Gender.M, 2001, 10, 1, Region.Braila)
+    cnp1 = Cnp(Gender.M, datetime(1993, 8, 2), Region.Braila, serial=2)
     print(cnp1.get_partial())
