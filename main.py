@@ -107,6 +107,10 @@ class Cnp:
         return gen_code
 
     def get_partial(self):
+        """Put together first 12 digits of CNP based on CNP standard.
+        :return: First 12 digits of CNP.
+        :rtype: str
+        """
         return "".join([
             str(self.get_gender_code()),
             self.birth_date.strftime("%y"),
