@@ -171,13 +171,3 @@ class Cnp:
             if int(_cnp[-1]) == Cnp.compute_c(partial):
                 return True
         return False
-
-
-
-class Generator:
-    pass
-
-
-if __name__ == '__main__':
-    cnp1 = Cnp(Gender.F, datetime(2016, 6, 21), Region.Iasi)
-    print(cnp1.full)

@@ -1,9 +1,9 @@
-from setuptools import setup
+import setuptools
 
-setup(
+setuptools.setup(
     name='cnp-generator',
-    version='0.0.1',
-    packages=[''],
+    version='0.0.2',
+    packages=['cnpgen'],
     url='',
     license='',
     author='Mihai Dinu',
