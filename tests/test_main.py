@@ -71,9 +71,9 @@ class TestCnp(TestCase):
                 Region.Covasna
             ).get_gender_code()
 
-    def test_get_partial(self):
+    def test_partial(self):
         cnp = Cnp(Gender.M, datetime(1993, 8, 2), Region.Braila, serial=2)
-        partial = cnp.get_partial()
+        partial = cnp.partial
         self.assertEqual(len(partial), 12)
         self.assertEqual(int(partial[0]), 1)
         self.assertEqual(int(partial[1]), 9)
@@ -89,7 +89,7 @@ class TestCnp(TestCase):
         self.assertEqual(int(partial[11]), 2)
 
         cnp2 = Cnp(Gender.F, datetime(2001, 12, 12), Region.Braila)
-        partial2 = cnp2.get_partial()
+        partial2 = cnp2.partial
         self.assertEqual(len(partial2), 12)
         self.assertEqual(int(partial2[0]), 6)
         self.assertEqual(int(partial2[1]), 0)

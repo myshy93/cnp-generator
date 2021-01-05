@@ -1,5 +1,7 @@
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+
+PARTIAL_LENGTH = 12
 
 
 class Gender(Enum):
@@ -59,6 +61,11 @@ class Region(Enum):
 
 
 class Cnp:
+
+    LENGTH = 13
+    PARTIAL_LENGTH = LENGTH - 1
+    REF_CONSTANT = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]
+
     def __init__(self, gender, birth_date, region, serial=1, resident=False):
 
         # sanity checks
@@ -106,7 +113,8 @@ class Cnp:
 
         return gen_code
 
-    def get_partial(self):
+    @property
+    def partial(self):
         """Put together first 12 digits of CNP based on CNP standard.
         :return: First 12 digits of CNP.
         :rtype: str
@@ -120,8 +128,51 @@ class Cnp:
             f"{self.serial:0>3}",
         ])
 
-    def get_full(self):
-        pass
+    @property
+    def full(self):
+        """Full CNP as string.
+        :return: Full CNP as string.
+        :rtype: str
+        """
+        return f"{self.partial}{self.compute_c(self.partial)}"
+
+    @staticmethod
+    def compute_c(partial):
+        """Compute check digit for a partial CNP (12 digits).
+        :param partial: Partial CNP to check.
+        :type partial: str
+        :return: Calculated control digit.
+        :rtype: int
+        """
+        if not isinstance(partial, str) or len(partial) != PARTIAL_LENGTH:
+            raise TypeError("Invalid partial CNP, expected a string with length 12.")
+
+        digits = [int(x) for x in partial if x.isdigit()]
+
+        if len(digits) != len(partial):
+            raise ValueError('Partial must contain only digits!')
+
+        step1 = [digits[i] * Cnp.REF_CONSTANT[i] for i in range(len(digits))]
+        step2 = sum(step1) % 11
+
+        if step2 < 10:
+            return step2
+        else:
+            return 1
+
+    @staticmethod
+    def is_valid(_cnp):
+        """Check CNP validity.
+        :param _cnp: CNP to check.
+        :type _cnp: str
+        :return: True if CNP is valid of False if not.
+        :rtype: bool
+        """
+        if isinstance(_cnp, str) or len(_cnp) == Cnp.LENGTH:
+            partial = _cnp[:-1]
+            if int(_cnp[-1]) == Cnp.compute_c(partial):
+                return True
+        return False
 
 
 
@@ -131,4 +182,4 @@ class Generator:
 
 if __name__ == '__main__':
     cnp1 = Cnp(Gender.M, datetime(1993, 8, 2), Region.Braila, serial=2)
-    print(cnp1.get_partial())
+    print(cnp1.full)
