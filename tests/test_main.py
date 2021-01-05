@@ -103,3 +103,29 @@ class TestCnp(TestCase):
         self.assertEqual(int(partial2[9]), 0)
         self.assertEqual(int(partial2[10]), 0)
         self.assertEqual(int(partial2[11]), 1)
+
+    def test_compute_c(self):
+        self.assertEqual(Cnp.compute_c('506060251001'), 4)
+        self.assertEqual(Cnp.compute_c('616062122001'), 4)
+
+        with self.assertRaises(TypeError):
+            Cnp.compute_c('245432')
+
+        with self.assertRaises(ValueError):
+            Cnp.compute_c('61606212200q')
+
+        self.assertEqual(Cnp.compute_c('001100000000'), 1)
+
+    def test_full(self):
+        cnp = Cnp(Gender.M, datetime(1993, 3, 2), Region.Iasi, serial=22)
+        self.assertEqual(len(cnp.full), Cnp.LENGTH)
+        self.assertEqual(cnp.full, '1930302220223')
+        cnp2 = Cnp(Gender.M, datetime(2006, 6, 2), Region.Calarasi)
+        self.assertEqual(cnp2.full, '5060602510014')
+
+    def test_is_valid(self):
+        self.assertTrue(Cnp.is_valid('1930302220223'))
+        self.assertFalse(Cnp.is_valid(1923456))
+        self.assertFalse(Cnp.is_valid('1923456'))
+        self.assertFalse(Cnp.is_valid(None))
+        self.assertFalse(Cnp.is_valid('1930302220224'))

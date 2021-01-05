@@ -1,8 +1,6 @@
 from datetime import datetime
 from enum import Enum
 
-PARTIAL_LENGTH = 12
-
 
 class Gender(Enum):
     M = 1
@@ -144,7 +142,7 @@ class Cnp:
         :return: Calculated control digit.
         :rtype: int
         """
-        if not isinstance(partial, str) or len(partial) != PARTIAL_LENGTH:
+        if not isinstance(partial, str) or len(partial) != Cnp.PARTIAL_LENGTH:
             raise TypeError("Invalid partial CNP, expected a string with length 12.")
 
         digits = [int(x) for x in partial if x.isdigit()]
@@ -168,7 +166,7 @@ class Cnp:
         :return: True if CNP is valid of False if not.
         :rtype: bool
         """
-        if isinstance(_cnp, str) or len(_cnp) == Cnp.LENGTH:
+        if isinstance(_cnp, str) and len(_cnp) == Cnp.LENGTH:
             partial = _cnp[:-1]
             if int(_cnp[-1]) == Cnp.compute_c(partial):
                 return True
@@ -181,5 +179,5 @@ class Generator:
 
 
 if __name__ == '__main__':
-    cnp1 = Cnp(Gender.M, datetime(1993, 8, 2), Region.Braila, serial=2)
+    cnp1 = Cnp(Gender.F, datetime(2016, 6, 21), Region.Iasi)
     print(cnp1.full)
