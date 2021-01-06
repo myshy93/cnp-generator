@@ -180,8 +180,12 @@ class Cnp:
     def info(_cnp):
         if Cnp.is_valid(_cnp):
             gender = Gender(int(_cnp[0]))
-            # TODO: fix 1921 - 2021 issue by calculating year with respect to gender
-            b_date = datetime.strptime(_cnp[1:7], "%y%m%d")
+            if int(_cnp[0]) in [1, 2]:
+                year_prefix = "19"
+            else:
+                year_prefix = "20"
+            b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
+            # TODO: print info about gender, birth date and region
             print(b_date)
         else:
             raise ValueError('Invalid CNP.')
