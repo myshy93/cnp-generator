@@ -1,7 +1,7 @@
 from datetime import datetime
 from unittest import TestCase
 
-from main import Cnp, Gender, Region
+from cnpgen import Cnp, Gender, Region
 
 
 class TestCnp(TestCase):
@@ -10,8 +10,6 @@ class TestCnp(TestCase):
         self.dummy_date1 = datetime(2001, 10, 1)
         self.dummy_date2 = datetime(1993, 10, 1)
         self.dummy_date3 = datetime(1999, 10, 1)
-        self.dummy_date4 = datetime(1895, 10, 1)
-        self.dummy_date5 = datetime(1877, 10, 1)
         self.out_range_date = datetime(1700, 1, 2)
         self.out_range_date2 = datetime(2200, 1, 2)
 
@@ -44,8 +42,6 @@ class TestCnp(TestCase):
         cnp2 = Cnp(Gender.F, self.dummy_date1, Region.Braila)
         cnp3 = Cnp(Gender.M, self.dummy_date2, Region.Braila)
         cnp4 = Cnp(Gender.F, self.dummy_date3, Region.Braila)
-        cnp5 = Cnp(Gender.M, self.dummy_date4, Region.Braila)
-        cnp6 = Cnp(Gender.F, self.dummy_date5, Region.Braila)
         # resident
         cnp7 = Cnp(Gender.F, self.dummy_date1, Region.Braila, resident=True)
         cnp8 = Cnp(Gender.M, self.dummy_date3, Region.Braila, resident=True)
@@ -54,8 +50,6 @@ class TestCnp(TestCase):
         self.assertEqual(cnp2.get_gender_code(), 6)
         self.assertEqual(cnp3.get_gender_code(), 1)
         self.assertEqual(cnp4.get_gender_code(), 2)
-        self.assertEqual(cnp5.get_gender_code(), 3)
-        self.assertEqual(cnp6.get_gender_code(), 4)
         self.assertEqual(cnp7.get_gender_code(), 8)
         self.assertEqual(cnp8.get_gender_code(), 7)
 

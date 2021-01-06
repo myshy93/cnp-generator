@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date, time
 from enum import Enum
 
 
@@ -88,6 +88,12 @@ class Cnp:
         self.serial = serial
         self.resident = resident
 
+    def __str__(self):
+        return self.full
+
+    def __repr__(self):
+        return f"< Cnp {self.full} >"
+
     def get_gender_code(self):
         """Calculate gender code based on gender, year and whether is resident or not.
 
@@ -99,8 +105,6 @@ class Cnp:
             gen_code = 7
         elif 1900 <= self.birth_date.year <= 1999:
             gen_code = 1
-        elif 1800 <= self.birth_date.year <= 1899:
-            gen_code = 3
         elif 2000 <= self.birth_date.year <= 2099:
             gen_code = 5
         else:
@@ -171,3 +175,16 @@ class Cnp:
             if int(_cnp[-1]) == Cnp.compute_c(partial):
                 return True
         return False
+
+    @staticmethod
+    def info(_cnp):
+        if Cnp.is_valid(_cnp):
+            gender = Gender(int(_cnp[0]))
+            # TODO: fix 1921 - 2021 issue by calculating year with respect to gender
+            b_date = datetime.strptime(_cnp[1:7], "%y%m%d")
+            print(b_date)
+        else:
+            raise ValueError('Invalid CNP.')
+
+
+Cnp.info('1930829090020')
