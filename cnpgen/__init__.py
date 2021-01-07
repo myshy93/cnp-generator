@@ -185,8 +185,14 @@ class Cnp:
             else:
                 year_prefix = "20"
             b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
+            region = Region(int(_cnp[7:9]))
+            print(
+                f"CNP: {_cnp}\n"
+                f"Gender: {gender.name}\n"
+                f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
+                f"Region: {region.name}\n"
+            )
             # TODO: print info about gender, birth date and region
-            print(b_date)
         else:
             raise ValueError('Invalid CNP.')
 
