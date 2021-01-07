@@ -119,7 +119,15 @@ class TestCnp(TestCase):
 
     def test_is_valid(self):
         self.assertTrue(Cnp.is_valid('1930302220223'))
+        self.assertTrue(Cnp.is_valid('6200203220011'))
         self.assertFalse(Cnp.is_valid(1923456))
         self.assertFalse(Cnp.is_valid('1923456'))
         self.assertFalse(Cnp.is_valid(None))
         self.assertFalse(Cnp.is_valid('1930302220224'))
+
+    def test_info(self):
+        with self.assertRaises(ValueError):
+            Cnp.info('111')
+
+        self.assertIsInstance(Cnp.info('1930302220223'), str)
+        self.assertIsInstance(Cnp.info('6200203220011'), str)

@@ -65,12 +65,26 @@ class Cnp:
     REF_CONSTANT = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]
 
     def __init__(self, gender, birth_date, region, serial=1, resident=False):
+        """Cnp is a object that holds data needed to construct a CNP number.
 
+        :param gender: Person's gender.
+        :type gender: Gender
+        :param birth_date: Person's birth date
+        :type birth_date: date
+        :param region: Region of birth
+        :type region: Region
+        :param serial: Order number for persons born in same day an same region.
+        Default is 1.
+        :type serial: int
+        :param resident: Whether person is a resident or not. Default is false.
+        :type resident: bool
+        :raises TypeError: If any of parameters are not of required type or in range.
+        """
         # sanity checks
         if not isinstance(gender, Gender):
             raise TypeError('Gender in not a gender object.')
 
-        if not isinstance(birth_date, datetime):
+        if not isinstance(birth_date, date):
             raise TypeError('Birth date is not a datetime object.')
 
         if not isinstance(region, Region):
@@ -100,6 +114,7 @@ class Cnp:
         :raises ValueError: Invalid year was provided to constructor.
         :return: Gender code
         :rtype: int
+        :raises ValueError: If year in not in range 1900 - 2099.
         """
         if self.resident:
             gen_code = 7
@@ -118,6 +133,7 @@ class Cnp:
     @property
     def partial(self):
         """Put together first 12 digits of CNP based on CNP standard.
+
         :return: First 12 digits of CNP.
         :rtype: str
         """
@@ -133,6 +149,7 @@ class Cnp:
     @property
     def full(self):
         """Full CNP as string.
+
         :return: Full CNP as string.
         :rtype: str
         """
@@ -141,10 +158,14 @@ class Cnp:
     @staticmethod
     def compute_c(partial):
         """Compute check digit for a partial CNP (12 digits).
+
         :param partial: Partial CNP to check.
         :type partial: str
         :return: Calculated control digit.
         :rtype: int
+        :raises TypeError: If partial cnp provided is not a string or it length
+        is not equal to Cnp.PARTIAL_LENGTH.
+        :raises Value error: If provided partial contains other chars then digits.
         """
         if not isinstance(partial, str) or len(partial) != Cnp.PARTIAL_LENGTH:
             raise TypeError("Invalid partial CNP, expected a string with length 12.")
@@ -165,6 +186,7 @@ class Cnp:
     @staticmethod
     def is_valid(_cnp):
         """Check CNP validity.
+
         :param _cnp: CNP to check.
         :type _cnp: str
         :return: True if CNP is valid of False if not.
@@ -178,23 +200,25 @@ class Cnp:
 
     @staticmethod
     def info(_cnp):
+        """Builds a formatted string after decoding information contained in CNP.
+
+        :param _cnp: CNP to decode.
+        :return: Decoded info.
+        :rtype: str
+        """
         if Cnp.is_valid(_cnp):
-            gender = Gender(int(_cnp[0]))
             if int(_cnp[0]) in [1, 2]:
+                gender = Gender(int(_cnp[0]))
                 year_prefix = "19"
             else:
+                gender = Gender(int(_cnp[0]) - 4)
                 year_prefix = "20"
             b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
             region = Region(int(_cnp[7:9]))
-            print(
-                f"CNP: {_cnp}\n"
-                f"Gender: {gender.name}\n"
-                f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
-                f"Region: {region.name}\n"
-            )
-            # TODO: print info about gender, birth date and region
+            return (f"CNP: {_cnp}\n"
+                    f"Gender: {gender.name}\n"
+                    f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
+                    f"Region: {region.name}\n"
+                    )
         else:
             raise ValueError('Invalid CNP.')
-
-
-Cnp.info('1930829090020')
