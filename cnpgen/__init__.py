@@ -59,7 +59,6 @@ class Region(Enum):
 
 
 class Cnp:
-    # TODO: make method for get_info
     LENGTH = 13
     PARTIAL_LENGTH = LENGTH - 1
     REF_CONSTANT = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]
