@@ -1,4 +1,4 @@
-from datetime import datetime, date, time
+from datetime import datetime, date
 from enum import Enum
 
 
@@ -8,6 +8,7 @@ class Gender(Enum):
 
 
 class Region(Enum):
+    # TODO: fix _ issue
     Alba = 1
     Arad = 2
     Arges = 3
@@ -122,7 +123,7 @@ class Cnp:
         elif 2000 <= self.birth_date.year <= 2099:
             gen_code = 5
         else:
-            raise ValueError('Year is out of range.')
+            raise ValueError('Year is out of range. Allowed range 1900-2099')
 
         if self.gender == Gender.F:
             gen_code += 1
