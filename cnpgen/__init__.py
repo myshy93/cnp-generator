@@ -218,7 +218,7 @@ class Cnp:
             b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
             region = Region(int(_cnp[7:9]))
             return (f"CNP: {_cnp}\n"
-                    f"Gender: {gender}\n"
+                    f"Gender: {gender.name}\n"
                     f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
                     f"Region: {region}\n"
                     )
