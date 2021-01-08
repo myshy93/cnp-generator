@@ -8,7 +8,6 @@ class Gender(Enum):
 
 
 class Region(Enum):
-    # TODO: fix _ issue
     Alba = 1
     Arad = 2
     Arges = 3
@@ -49,15 +48,18 @@ class Region(Enum):
     Valcea = 38
     Vrancea = 39
     Bucuresti = 40
-    Bucuresti_Sector__1 = 41
-    Bucuresti_Sector__2 = 42
-    Bucuresti_Sector__3 = 43
-    Bucuresti_Sector__4 = 44
-    Bucuresti_Sector__5 = 45
-    Bucuresti_Sector__6 = 46
+    Bucuresti__Sector__1 = 41
+    Bucuresti__Sector__2 = 42
+    Bucuresti__Sector__3 = 43
+    Bucuresti__Sector__4 = 44
+    Bucuresti__Sector__5 = 45
+    Bucuresti__Sector__6 = 46
     Calarasi = 51
     Giurgiu = 52
 
+    def __str__(self):
+        normalize = self.name.replace('__', ' ').replace('_', '-')
+        return normalize
 
 class Cnp:
     LENGTH = 13
@@ -216,9 +218,9 @@ class Cnp:
             b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
             region = Region(int(_cnp[7:9]))
             return (f"CNP: {_cnp}\n"
-                    f"Gender: {gender.name}\n"
+                    f"Gender: {gender}\n"
                     f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
-                    f"Region: {region.name}\n"
+                    f"Region: {region}\n"
                     )
         else:
             raise ValueError('Invalid CNP.')

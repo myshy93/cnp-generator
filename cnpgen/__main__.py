@@ -8,12 +8,18 @@ from datetime import date
 
 from .__init__ import Cnp, Gender, Region
 
+VERSION = '1.1.0'
 PROG_DESCRIPTION = "Cnpgen - CLI tool for handling CNP related tasks."
 MIN_D_DATE_TS = time.mktime(time.strptime('1990-01-01', "%Y-%M-%d"))
 MAX_D_DATE_TS = time.mktime(time.strptime('2099-12-31', "%Y-%M-%d"))
 
 # set argparser
 parser = argparse.ArgumentParser(description=PROG_DESCRIPTION, prog='cnpgen')
+parser.add_argument(
+    '--version',
+    action='version',
+    version=VERSION
+)
 parser.add_argument(
     '-c',
     action='store_true',
@@ -53,10 +59,10 @@ if args.c:
         resident = False
 
     try:
-        in_gender = input('Gender? [M]: ')
+        in_gender = input('Gender? [M]: ').upper()
         gender = Gender.M
         if len(in_gender):
-            gender = Gender[input('Gender? [M]: ')]
+            gender = Gender[in_gender]
     except KeyError:
         print('Value not allowed! Please use M or F. Default is M.')
         sys.exit(2)
@@ -73,20 +79,23 @@ if args.c:
         print('Invalid date.')
         sys.exit(2)
     try:
-        region = Region[input('Region: ')]
+        region = Region[input('Region: ').title().replace('-', '_').replace(' ', '__')]
     except KeyError:
         print('Invalid region name.')
+        sys.exit(2)
     try:
         serial = 1
         in_serial = input('Order number [1]: ')
         if len(in_serial):
-            serial = in_serial
+            serial = int(in_serial)
     except ValueError:
         print('Serial must be number. Default is 1.')
+        sys.exit(2)
     try:
         print(f'\nRESULT: {Cnp(gender, b_date, region, serial, resident)}')
     except Exception as err:
         print(err)
+        sys.exit(2)
 
 elif args.g:
     iterations = args.g[0]

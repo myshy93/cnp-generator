@@ -131,3 +131,4 @@ class TestCnp(TestCase):
 
         self.assertIsInstance(Cnp.info('1930302220223'), str)
         self.assertIsInstance(Cnp.info('6200203220011'), str)
+        print(Cnp.info('1920323420017'))
