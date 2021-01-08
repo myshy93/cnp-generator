@@ -5,11 +5,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='cnp-generator',
-    version='1.0.3',
+    version='1.1.0',
     url='https://github.com/myshy93/cnp-generator',
     author='Mihai Dinu',
     author_email='mihai.dinu93@gmail.com',
     license='MIT',
+    keywords='cnp romania generator decoder',
     description='Romania CNP number generator and decoder.',
     long_description=long_description,
     long_description_content_type="text/markdown",
