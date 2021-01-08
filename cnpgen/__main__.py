@@ -1,24 +1,19 @@
-"""
--c create
--g [n=1] random generate
--i <cnp> info
-"""
+"""CNP tool for handling CNP numbers."""
+
 import argparse
-# constants
-import sys
-from datetime import date
 import random
+import sys
 import time
+from datetime import date
 
-from __init__ import Cnp, Gender, Region
+from .__init__ import Cnp, Gender, Region
 
-PROG_DESCRIPTION = ""
-PROG_USAGE = ""
+PROG_DESCRIPTION = "Cnpgen - CLI tool for handling CNP related tasks."
 MIN_D_DATE_TS = time.mktime(time.strptime('1990-01-01', "%Y-%M-%d"))
 MAX_D_DATE_TS = time.mktime(time.strptime('2099-12-31', "%Y-%M-%d"))
 
 # set argparser
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description=PROG_DESCRIPTION, prog='cnpgen')
 parser.add_argument(
     '-c',
     action='store_true',
