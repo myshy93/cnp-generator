@@ -10,6 +10,7 @@ setuptools.setup(
     author='Mihai Dinu',
     author_email='mihai.dinu93@gmail.com',
     license='MIT',
+    keywords='cnp romania generator decoder',
     description='Romania CNP number generator and decoder.',
     long_description=long_description,
     long_description_content_type="text/markdown",
