@@ -201,26 +201,67 @@ class Cnp:
         return False
 
     @staticmethod
+    def parse(_cnp):
+        """Parse a CNP and extract relevant data.
+
+        Dictionary schema:
+        {
+            gender: Gender,
+            b_day: int,
+            b_month: int,
+            b_year: int,
+            region: Region,
+            serial: int,
+            resident: bool
+        }
+
+        :param _cnp: CNP to decode.
+        :return: Decoded info as dictionary.
+        :rtype: dict
+        :raises ValueError: If CNP in not valid.
+        """
+        if Cnp.is_valid(_cnp):
+            resident = False
+            if int(_cnp[0]) in [1, 2]:
+                gender = Gender(int(_cnp[0]))
+                year_prefix = "19"
+            elif int(_cnp[0]) in [7, 8]:
+                resident = True
+                gender = Gender(int(_cnp[0]) - 6)
+                year_prefix = "20"
+            else:
+                gender = Gender(int(_cnp[0]) - 4)
+                year_prefix = "20"
+            b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
+            region = Region(int(_cnp[7:9]))
+            serial = int(_cnp[9:12])
+
+            return {
+                'gender': gender,
+                'b_day': b_date.day,
+                'b_month': b_date.month,
+                'b_year': b_date.year,
+                'region': region,
+                'serial': serial,
+                'resident': resident
+            }
+        else:
+            raise ValueError('Invalid CNP.')
+
+    @staticmethod
     def info(_cnp):
         """Builds a formatted string after decoding information contained in CNP.
 
         :param _cnp: CNP to decode.
         :return: Decoded info.
         :rtype: str
+        :raises ValueError: see parse method.
         """
-        if Cnp.is_valid(_cnp):
-            if int(_cnp[0]) in [1, 2]:
-                gender = Gender(int(_cnp[0]))
-                year_prefix = "19"
-            else:
-                gender = Gender(int(_cnp[0]) - 4)
-                year_prefix = "20"
-            b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
-            region = Region(int(_cnp[7:9]))
-            return (f"CNP: {_cnp}\n"
-                    f"Gender: {gender.name}\n"
-                    f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
-                    f"Region: {region}\n"
-                    )
-        else:
-            raise ValueError('Invalid CNP.')
+        data = Cnp.parse(_cnp)
+        return (f"CNP: {_cnp}\n"
+                f"Gender: {data.get('gender').name}\n"
+                f"Birth year: {data.get('b_year')}\n"
+                f"Birth month: {data.get('b_month')}\n"
+                f"Birth day: {data.get('b_day')}\n"
+                f"Region: {data.get('region')}\n"
+                )
