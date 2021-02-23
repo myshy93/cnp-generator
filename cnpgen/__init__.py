@@ -255,20 +255,13 @@ class Cnp:
         :param _cnp: CNP to decode.
         :return: Decoded info.
         :rtype: str
+        :raises ValueError: see parse method.
         """
-        if Cnp.is_valid(_cnp):
-            if int(_cnp[0]) in [1, 2]:
-                gender = Gender(int(_cnp[0]))
-                year_prefix = "19"
-            else:
-                gender = Gender(int(_cnp[0]) - 4)
-                year_prefix = "20"
-            b_date = datetime.strptime(f"{year_prefix}{_cnp[1:7]}", "%Y%m%d")
-            region = Region(int(_cnp[7:9]))
-            return (f"CNP: {_cnp}\n"
-                    f"Gender: {gender.name}\n"
-                    f"Birth date: {b_date.date().strftime('%d.%m.%Y')}\n"
-                    f"Region: {region}\n"
-                    )
-        else:
-            raise ValueError('Invalid CNP.')
+        data = Cnp.parse(_cnp)
+        return (f"CNP: {_cnp}\n"
+                f"Gender: {data.get('gender').name}\n"
+                f"Birth year: {data.get('b_year')}\n"
+                f"Birth month: {data.get('b_month')}\n"
+                f"Birth day: {data.get('b_day')}\n"
+                f"Region: {data.get('region')}\n"
+                )
