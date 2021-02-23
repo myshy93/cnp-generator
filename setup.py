@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='cnp-generator',
-    version='1.1.0',
+    version='1.1.1',
     url='https://github.com/myshy93/cnp-generator',
     author='Mihai Dinu',
     author_email='mihai.dinu93@gmail.com',

@@ -8,7 +8,7 @@ from datetime import date
 
 from .__init__ import Cnp, Gender, Region
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 PROG_DESCRIPTION = "Cnpgen - CLI tool for handling CNP related tasks."
 MIN_D_DATE_TS = time.mktime(time.strptime('1990-01-01', "%Y-%M-%d"))
 MAX_D_DATE_TS = time.mktime(time.strptime('2099-12-31', "%Y-%M-%d"))
