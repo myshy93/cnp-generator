@@ -132,3 +132,10 @@ class TestCnp(TestCase):
         self.assertIsInstance(Cnp.info('1930302220223'), str)
         self.assertIsInstance(Cnp.info('6200203220011'), str)
         print(Cnp.info('1920323420017'))
+
+    def test_parse(self):
+        with self.assertRaises(ValueError):
+            Cnp.info('111')
+        self.assertIsInstance(Cnp.parse('1930302220223'), dict)
+        self.assertIsInstance(Cnp.parse('6200203220011'), dict)
+        print(Cnp.parse('1920323420017'))

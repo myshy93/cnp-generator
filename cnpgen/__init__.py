@@ -225,8 +225,8 @@ class Cnp:
             if int(_cnp[0]) in [1, 2]:
                 gender = Gender(int(_cnp[0]))
                 year_prefix = "19"
-                resident = True
             elif int(_cnp[0]) in [7, 8]:
+                resident = True
                 gender = Gender(int(_cnp[0]) - 6)
                 year_prefix = "20"
             else:
